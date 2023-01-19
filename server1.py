@@ -1,14 +1,17 @@
-import socket
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+import socket #to creates sockets
+import pickle #used to serializing and deserializing a python obj. structure
+
+a=10 #some header size
+s=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 #to create socket of server
 #AF_INET refers to address from the internet it require pair of host and port number
 #where the host can be url or  address and port number 
 #SOCK_STREAM is used to create TCP protocols
 
-s.bind((socket.gethostname(), 3457))
+s.bind((socket.gethostname(),4455)) #binding tuples
 # it accepts 2 parameter host and port number
 # gethostname() is used when server and client is on the same device
-# port number greater than 1023 
+# 3456 port number greater than 1023 
 # it is used to bind server with the client
 
 s.listen(5)
@@ -21,8 +24,15 @@ while True:
     # to accept client socket and address
     print(f"Connection to {adr} established")
     # f string is literal string prefixed with f and contains py expression within ""
-    clt.send(bytes("Socket programming in python","utf-8"))
+    
+    m={1:"Clients", 2:"Server"}
+    mymsg = pickle.dumps(m) #the msg we want to print later
+    #dictonary "m" used dumps method available in pickle module 
+    #to serialize this object "m"(dictonary)
+    mymsg = bytes(f'{len(mymsg):<{a}}',"utf-8") + mymsg
+    #incrementing mymsg and sending using "send method"
+
+    clt.send(mymsg)
     # after connection is established to pass the message
     # we are passing bytes so bytes type is specified
-    clt.close() #to close communication
-
+    # clt.close() #to close communication

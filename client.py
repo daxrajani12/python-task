@@ -1,8 +1,16 @@
 import socket
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+#to create socket of sclient
+#AF_INET refers to address from the internet it require pair of host and port number
+#where the host can be url or  address and port number 
+#SOCK_STREAM is used to create TCP protocols
+
 
 s.connect((socket.gethostname(), 3457))
+#to connect client with server 
+# gethostname() is used when server and client is on the same device
+# port number greater than 1023 
 
 complete_info = '' #to terminate clinet. it allow to accept any information from server
 
