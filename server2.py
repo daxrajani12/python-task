@@ -15,7 +15,7 @@ s.bind((host, port))
 s.listen(1)
 
 print("Waiting for a client...")
-
+flag = 0
 while True:
     # establish a connection
     clientsocket, addr = s.accept()
@@ -28,8 +28,9 @@ while True:
             
             if message == "q":
                 print("Client disconnected")
+                flag = 1
                 clientsocket.close()
-                # break
+                break
                 # s.close()
                 # s.shutdown(socket.SHUT_RDWR)
                 
@@ -39,7 +40,16 @@ while True:
                 message_send = input("Server: ")
                 clientsocket.send(message_send.encode())
                 if message_send == "q":
-                    print("disconnect")
+                    # print("disconnect")
+                    flag = 1
                     clientsocket.close()
-                    s.close()
-                    s.shutdown(socket.SHUT_RDWR)
+                    break
+                    # s.close()
+                    # s.shutdown(socket.SHUT_RDWR)
+    if flag == 1:
+        break
+
+if flag == 1:
+    print("server disconnected ")
+    s.close()
+    # s.shutdown(socket.SHUT_RDWR)

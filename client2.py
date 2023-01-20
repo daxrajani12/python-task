@@ -20,8 +20,9 @@ while True:
         break
     received_message = s.recv(1024).decode()
     if received_message == "q":
-        print("Server: %s" % received_message)
-        print("disconnected")
+        # print("Server: %s" % received_message)
+        print("server disconnected")
+        print("client disconnected")
         break
     print("Server: %s" % received_message)
 
