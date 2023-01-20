@@ -13,7 +13,7 @@ while True: #untill break condition not appiled
     s.send(message.encode()) #sending message to server 
     if message == "q": #condition for exit message on client side
         print("disconnected")
-        s.send(message.encode()) #sending exit message to server so server will also get disconnected
+        # s.send(message.encode()) #sending exit message to server so server will also get disconnected
         break
     received_message = s.recv(1024).decode() # message received from server
     if received_message == "q": #condition for exit message received from server
