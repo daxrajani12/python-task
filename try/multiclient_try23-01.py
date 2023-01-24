@@ -12,22 +12,28 @@ def receive():
             message = client.recv(1024).decode()
             if message == 'cli':
                 client.send(cli_name.encode())
+            # elif message == 'exit':
+            #     print("disconnected")
+            #     client.close()
             else:
                 print(message)
+            # client.close()
         except:
-            print("an error occured")
             client.close()
             break
 
 def write():
     while True:
         msg = input("")
-        if msg == "exit":
-            client.send(cli_name.encode())
-            client.close()
         message = f'{cli_name} : {msg}'
-        
-        client.send(message.encode())
+        if msg == "exit":
+            # client.send(cli_name.encode())
+            print("disconnected")
+            client.close()
+            break
+        else:
+            client.send(message.encode())
+    # client.close()
 
 receive_thread = threading.Thread(target=receive)
 receive_thread.start()
