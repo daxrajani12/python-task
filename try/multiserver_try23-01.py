@@ -1,26 +1,27 @@
-import threading
-import socket
+import threading #for thread functions
+import socket #to use socket modules
 
-host = '127.0.0.1' #local host
+host = '127.0.0.1' #local host ip address
 port = 4567 #port number
 
-server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server.bind((host,port))
-server.listen()
+server = socket.socket(socket.AF_INET, socket.SOCK_STREAM) #create server socket object
+server.bind((host,port)) #bind the server to host, and port
+server.listen() #it is used to connect to a remote address
 
-clients = []
-cli_names = []
+clients = [] #list to store client number 
+cli_names = [] #list to store client name 
+#both number and name will have same index value
 
-def broadcast(message):
-    for client in clients:
+def broadcast(message): #to send message to all client 
+    for client in clients: #loop in clients list
         # if clients.index() != client:
         #     continue
-        client.send(message)
+        client.send(message) #sends the message to all the clients
 
-def handle(client):
-    while True:
-        try:
-            message = client.recv(1024)
+def handle(client): #to handle the clients
+    while True: #loop untill break is applied
+        try: #first it will be executed if error occur than except will be executed
+            message = client.recv(1024) #message received from on of the clients
             # if message == cli_name:
             #     broadcast(f'{cli_name} left the chat'.encode())
             #     index = cli_names[cli_name]
@@ -28,33 +29,33 @@ def handle(client):
             #     clients.remove(index)
             #     client.close()
             # else:    
-            broadcast(message)
-        except:
-            index = clients.index(client)
-            clients.remove(client)
-            client.close()
-            cli_name = cli_names[index]
-            broadcast(f'{cli_name} left the chat'.encode())
-            print(f'{cli_name} left the chat')
-            cli_names.remove(cli_name)
+            broadcast(message) # broadcast function is called 
+        except: # if error occurs in the try than this will be executed
+            index = clients.index(client) #will get the index from the list
+            clients.remove(client) # will remove the client from clients list
+            client.close() #close the client socket connection
+            cli_name = cli_names[index] #will get the name of client 
+            broadcast(f'{cli_name} left the chat'.encode()) #broadcasts the message
+            print(f'{cli_name} left the chat') #prints on server window
+            cli_names.remove(cli_name) #removes the client name feom list
             break
 
-def receive():
+def receive(): #to accept the connection 
     while True:
-        client, address = server.accept()
-        print(f"connected with {str(address)}")
+        client, address = server.accept() #to accept client socket and address and establish the connection
+        print(f"connected with {str(address)}") #print the client name and address on server
 
-        client.send('cli'.encode())
-        cli_name = client.recv(1024).decode()
-        cli_names.append(cli_name)
-        clients.append(client)
+        client.send('cli'.encode()) #sends the cli key word so client send the name 
+        cli_name = client.recv(1024).decode() #received the name form the client
+        cli_names.append(cli_name) #client will be appended to the list
+        clients.append(client) #client will be appended to the list
 
-        print(f'Name of the client is {cli_name}')
-        broadcast(f'{cli_name} joined the chat'.encode())
-        client.send('Connected to the server'.encode())
+        print(f'Name of the client is {cli_name}') #prints the name of clie on server
+        broadcast(f'{cli_name} joined the chat'.encode()) #message with client name will be broadcasted
+        client.send('Connected to the server'.encode()) #message will be directly sent to the server
 
-        thread = threading.Thread(target=handle, args=(client,))
-        thread.start()
+        thread = threading.Thread(target=handle, args=(client,)) # parameter is set to handle function with client as the argument passed to the function. it will run hundle fun. in seperate thread
+        thread.start() #starts the thread 
 
 print("Server is listening...")
 receive()
