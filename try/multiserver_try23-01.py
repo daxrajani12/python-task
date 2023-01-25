@@ -20,13 +20,6 @@ def handle(client): #to handle the clients
     while True: #loop untill break is applied
         try: #first it will be executed if error occur than except will be executed
             message = client.recv(1024) #message received from on of the clients
-            # if message == cli_name:
-            #     broadcast(f'{cli_name} left the chat'.encode())
-            #     index = cli_names[cli_name]
-            #     cli_names.remove(cli_name)
-            #     clients.remove(index)
-            #     client.close()
-            # else:    
             broadcast(message) # broadcast function is called 
         except: # if error occurs in the try than this will be executed
             index = clients.index(client) #will get the index from the list

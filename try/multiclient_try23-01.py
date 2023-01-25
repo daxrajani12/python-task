@@ -12,12 +12,8 @@ def receive(): #function for receiving message from the server
             message = client.recv(1024).decode() #message received from the server
             if message == 'cli': # checking if cli is received than it will sned the client name
                 client.send(cli_name.encode()) #sending client name
-            # elif message == 'exit':
-            #     print("disconnected")
-            #     client.close()
             else:   #else printing the message 
                 print(message) #print message received from the server
-            # client.close()
         except: #if error occur in try this will be executed
             client.close() #it closes the client
             break
@@ -27,7 +23,6 @@ def write(): #function to get message from client and send that message to serve
         msg = input("") #get message from the client
         message = f'{cli_name} : {msg}' #attaching message with client name
         if msg == "exit":  #if message is exit than it will close the client socket
-            # client.send(cli_name.encode())
             print("disconnected") 
             client.close() #to close client socket
             break
