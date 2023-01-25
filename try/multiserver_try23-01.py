@@ -14,8 +14,6 @@ cli_names = [] #list to store client name
 
 def broadcast(message): #to send message to all client 
     for client in clients: #loop in clients list
-        # if clients.index() != client:
-        #     continue
         client.send(message) #sends the message to all the clients
 
 def handle(client): #to handle the clients
