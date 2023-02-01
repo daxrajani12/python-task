@@ -16,20 +16,34 @@ def broadcast(message): #to send message to all client
     for client in clients: #loop in clients list
         client.send(message) #sends the message to all the clients
 
-def handle(client): #to handle the clients
+def handle(client, address): #to handle the clients
     while True: #loop untill break is applied
-        try: #first it will be executed if error occur than except will be executed
-            message = client.recv(1024) #message received from on of the clients
-            broadcast(message) # broadcast function is called 
-        except: # if error occurs in the try than this will be executed
-            index = clients.index(client) #will get the index from the list
+        # try: #first it will be executed if error occur than except will be executed
+        message = client.recv(1024).decode() #message received from on of the clients
+            # if message == "exit":
+            #     break
+            # print(f"[{cli_name}] {message}")
+            # message_send = input("enter message: ")
+            # client.send(message_send.encode())
+    # client.close()
+            # broadcast(message) # broadcast function is called 
+        # except: # if error occurs in the try than this will be executed
+        index = clients.index(client)
+        cli_name = cli_names[index]
+
+        if message == "exit":    
+            # index = clients.index(client) #will get the index from the list
             clients.remove(client) # will remove the client from clients list
             client.close() #close the client socket connection
-            cli_name = cli_names[index] #will get the name of client 
+            # cli_name = cli_names[index] #will get the name of client 
             broadcast(f'{cli_name} left the chat'.encode()) #broadcasts the message
             print(f'{cli_name} left the chat') #prints on server window
             cli_names.remove(cli_name) #removes the client name feom list
             break
+        else:
+            print(message)
+            message_send = input("enter message: ")
+            client.send(message_send.encode())
 
 def receive(): #to accept the connection 
     while True:
@@ -45,8 +59,11 @@ def receive(): #to accept the connection
         broadcast(f'{cli_name} joined the chat'.encode()) #message with client name will be broadcasted
         client.send('Connected to the server'.encode()) #message will be directly sent to the server
 
-        thread = threading.Thread(target=handle, args=(client,)) # parameter is set to handle function with client as the argument passed to the function. it will run hundle fun. in seperate thread
+        thread = threading.Thread(target=handle, args=(client,address)) # parameter is set to handle function with client as the argument passed to the function. it will run hundle fun. in seperate thread
         thread.start() #starts the thread 
+
+        # thread_recv = threading.Thread(target=receive, args=(client, address))
+        # thread_recv.start()
 
 print("Server is listening...")
 receive()
