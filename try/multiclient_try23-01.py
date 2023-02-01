@@ -12,6 +12,9 @@ def receive(): #function for receiving message from the server
             message = client.recv(1024).decode() #message received from the server
             if message == 'cli': # checking if cli is received than it will sned the client name
                 client.send(cli_name.encode()) #sending client name
+            # elif message == 'exit':
+            #     client.close()
+            #     break
             else:   #else printing the message 
                 print(message) #print message received from the server
         except: #if error occur in try this will be executed
